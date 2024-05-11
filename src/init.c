@@ -6,11 +6,40 @@
 /*   By: aweissha <aweissha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:07:03 by aweissha          #+#    #+#             */
-/*   Updated: 2024/04/30 15:21:36 by aweissha         ###   ########.fr       */
+/*   Updated: 2024/05/11 18:28:51 by aweissha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+void	init_ray(int ray_index, t_data *data)
+{
+	t_player	*player;
+	t_ray		*ray;
+
+	if (data->ray == NULL)
+		data->ray = malloc(sizeof(t_ray));
+	if (data->ray == NULL)
+		ft_error_and_free("Memory allocation of ray failed\n", errno, data);	
+	player = data->player;
+	ray = data->ray;
+	ray->index = ray_index;
+	ray->start_pos.x = player->position.x;
+	ray->start_pos.y = player->position.y;
+	ray->pos.x = player->position.x;
+	ray->pos.y = player->position.y;
+	ray->screen_x = ((2 * ray_index) / data->screen_width) - 1;
+	ray->dir.x = player->direction.x + player->screen.x * ray->screen_x;
+	ray->dir.y = player->direction.y + player->screen.y * ray->screen_x;
+	ray->map_x = (int)player->position.x;
+	ray->map_y = (int)player->position.y;
+	ray->wall = 0;
+	ray->side = 0;
+	ray->perp_length = 0;
+	ray->line_height = 0;
+	ray->line_bottom = 0;
+	ray->line_top = 0;
+}
 
 void	ft_init_mlx(t_data *data)
 {
@@ -31,12 +60,12 @@ void	init_player(t_data *data)
 	if (data->player == NULL)
 		ft_error("Memory allocation of player struct failed\n", errno);
 	// set default values for plazer location and view angle
-	data->player->position.x = 22;
+	data->player->position.x = 20;
 	data->player->position.y = 12;
-	data->player->direction.x = -1;
-	data->player->direction.y = 0;
-	data->player->screen.x = 0;
-	data->player->screen.y = 0.66;
+	data->player->direction.x = 0.1;
+	data->player->direction.y = 0.1;
+	data->player->screen.x = -0.5;
+	data->player->screen.y = 0.5;
 }
 
 t_data	*init_data(int argc, char **argv)

@@ -6,42 +6,17 @@
 /*   By: aweissha <aweissha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:53:58 by aweissha          #+#    #+#             */
-/*   Updated: 2024/04/30 17:30:18 by aweissha         ###   ########.fr       */
+/*   Updated: 2024/05/11 18:05:00 by aweissha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	init_ray(int ray_index, t_data *data)
-{
-	t_player	*player;
-	t_ray		*ray;
-
-	if (data->ray == NULL)
-		data->ray = malloc(sizeof(t_ray));
-	if (data->ray == NULL)
-		ft_error_and_free("Memory allocation of ray failed\n", errno, data);	
-	player = data->player;
-	ray = data->ray;
-	ray->index = ray_index;
-	ray->screen_x = ((2 * ray_index) / data->screen_width) - 1;
-	ray->dir.x = player->direction.x + player->screen.x * ray->screen_x;
-	ray->dir.y = player->direction.y + player->screen.y * ray->screen_x;
-	ray->start_pos.x = player->position.x;
-	ray->start_pos.y = player->position.y;
-	ray->pos.x = player->position.x;
-	ray->pos.y = player->position.y;
-	ray->map_x = (int)player->position.x;
-	ray->map_y = (int)player->position.y;
-	ray->wall = 0;
-	ray->perp_length = 0;
-}
-
 double	get_lower(double a, double b)
 {
 	if (a < b)
 		return (a);
-	else if (b <= a)
+	else
 		return (b);
 }
 
@@ -82,6 +57,7 @@ void	elongate_ray(t_ray *ray)
 
 int is_integer(double x)
 {
+	// printf("hello from is_integer\n");
     return (fabs(x - round(x)) < 1e-9);
 }
 
@@ -110,24 +86,44 @@ the previous square has to be checked.
 void	check_for_wall(t_data *data)
 {
 	t_ray	*ray;
-	int		**map;
 
 	ray = data->ray;
-	map = data->map;
-	if (map[ray->map_x][ray->map_y] != 0)
-		ray->wall = map[ray->map_x][ray->map_y];
-	else if (ray->dir.x < 0 && is_integer(ray->pos.x) == 1
+	// printf("hello from check for wall 1\n");
+	// printf("ray->map: %d\n", data->map[ray->map_x][ray->map_y]);
+	// printf("ray->pos.x: %f\n", ray->pos.x);
+	// printf("ray->pos.y: %f\n", ray->pos.y);
+	// printf("ray->map_x: %d\n", ray->map_x);
+	// printf("ray->map_y: %d\n", ray->map_y);
+	// printf("ray->dir.x: %f\n", ray->dir.x);
+	// printf("ray->dir.y: %f\n", ray->dir.y);
+	
+	if (ray->dir.x < 0 && is_integer(ray->pos.x) == 1
 		&& ray->dir.y < 0 && is_integer(ray->pos.y) == 1
-		&& map[ray->map_x - 1][ray->map_y - 1] != 0)
-		ray->wall = map[ray->map_x - 1][ray->map_y - 1];
+		&& data->map[ray->map_x - 1][ray->map_y - 1] != 0)
+	{
+		// printf("hello from check for wall2\n");
+		ray->wall = data->map[ray->map_x - 1][ray->map_y - 1];
+	}
 	else if (ray->dir.x < 0 && is_integer(ray->pos.x) == 1
-		&& map[ray->map_x - 1][ray->map_y] != 0)
-		ray->wall = map[ray->map_x - 1][ray->map_y];
+		&& data->map[ray->map_x - 1][ray->map_y] != 0)
+	{
+		// printf("hello from check for wall3\n");
+		ray->wall = data->map[ray->map_x - 1][ray->map_y];
+	}
 	else if (ray->dir.y < 0 && is_integer(ray->pos.y) == 1
-		&& map[ray->map_x][ray->map_y - 1] != 0)
-		ray->wall = map[ray->map_x][ray->map_y - 1];
-	if (ray->wall != 0)
-		check_side(data);
+		&& data->map[ray->map_x][ray->map_y - 1] != 0)
+	{
+		// printf("hello from check for wall4\n");
+		ray->wall = data->map[ray->map_x][ray->map_y - 1];
+	}
+	else
+	{
+		// printf("hello from check for wall5\n");
+		ray->wall = data->map[ray->map_x][ray->map_y];
+	}
+	// printf("hello from check for wall last\n");
+	// if (ray->wall != 0)
+	// 	check_side(data);
 }
 
 double	vector_len(t_vector vector)
@@ -147,23 +143,24 @@ void	calc_perp_length(t_data *data)
 		+ pow(ray->pos.y - ray->start_pos.y, 2))
 		- sqrt(pow(vector_len(player->direction), 2)
 		+ pow((vector_len(player->screen) * ray->screen_x), 2)))
-		/ (sqrt(pow(vector_len(player->direction), 2)
+		/ 
+		(sqrt(pow(vector_len(player->direction), 2)
 		+ pow((vector_len(player->screen) * ray->screen_x), 2)))
 		* vector_len(player->direction);
 }
 
-double	ray_algorithm(t_data *data)
+void	ray_algorithm(t_data *data)
 {
 	t_ray	*ray;
 
 	ray = data->ray;
-	check_for_wall(data);
 	while (!(ray->wall))
 	{
+		// printf("hello from ray algorithm\n");
 		elongate_ray(ray);
 		check_for_wall(data);
 	}
-	calc_ray_length(ray);
+	calc_perp_length(data);
 }
 
 void	line_to_image(t_data *data)
@@ -173,8 +170,10 @@ void	line_to_image(t_data *data)
 
 	ray = data->ray;
 	counter = ray->line_top;
-	while (counter <= ray->line_bottom)
+	// printf("hello from line_to_image\n");
+	while (counter < ray->line_bottom)
 	{
+		// printf("counter: %d\n", counter);
 		mlx_put_pixel(data->img, ray->index, counter, 0xFF0000FF);
 		counter++;
 	}
@@ -190,9 +189,13 @@ void	render_image(t_data *data)
 	t_ray	*ray;
 
 	ray = data->ray;
-	ray->line_height = (int)data->screen_height / ray->perp_length;
-	ray->line_bottom = data->screen_height / 2 - ray->line_height / 2;
-	ray->line_top = data->screen_height / 2 + ray->line_height / 2;
+	// printf("hello from render_image\n");
+	if (ray->perp_length < 1)
+		ray->line_height = data->screen_height;
+	else
+		ray->line_height = (int)data->screen_height / ray->perp_length;
+	ray->line_top = data->screen_height / 2 - ray->line_height / 2;
+	ray->line_bottom = data->screen_height / 2 + ray->line_height / 2;
 	line_to_image(data);
 }
 
@@ -203,8 +206,11 @@ void	raycaster(t_data *data)
 	i = 0;
 	while (i < data->screen_width)
 	{
+		// printf("hello from raycaster\n");
 		init_ray(i, data);
+		// printf("hello from raycaster\n");
 		ray_algorithm(data);
+		printf("perp_length: %f\n", data->ray->perp_length);
 		render_image(data);
 		i++;
 	}

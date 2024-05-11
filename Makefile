@@ -1,4 +1,4 @@
-NAME = cub3d
+NAME = cub3D
 
 
 LIBFT	= libft/
@@ -18,6 +18,7 @@ RM = rm -f
 SRCS =		$(SRC_DIR)main.c \
 			$(SRC_DIR)init.c \
 			$(SRC_DIR)error.c \
+			$(SRC_DIR)raycasting.c \
 
 
 OBJS = $(SRCS:.c=.o)
