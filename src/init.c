@@ -6,7 +6,7 @@
 /*   By: aweissha <aweissha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:07:03 by aweissha          #+#    #+#             */
-/*   Updated: 2024/05/11 18:28:51 by aweissha         ###   ########.fr       */
+/*   Updated: 2024/05/15 18:03:19 by aweissha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ void	init_player(t_data *data)
 	if (data->player == NULL)
 		ft_error("Memory allocation of player struct failed\n", errno);
 	// set default values for plazer location and view angle
-	data->player->position.x = 20;
-	data->player->position.y = 12;
+	data->player->position.x = 22;
+	data->player->position.y = 4;
 	data->player->direction.x = 0.1;
-	data->player->direction.y = 0.1;
-	data->player->screen.x = -0.5;
-	data->player->screen.y = 0.5;
+	data->player->direction.y = -0.5;
+	data->player->screen.x = 0.5;
+	data->player->screen.y = 0.1;
 }
 
 t_data	*init_data(int argc, char **argv)

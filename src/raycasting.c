@@ -6,7 +6,7 @@
 /*   By: aweissha <aweissha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:53:58 by aweissha          #+#    #+#             */
-/*   Updated: 2024/05/11 18:05:00 by aweissha         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:46:51 by aweissha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,33 +97,46 @@ void	check_for_wall(t_data *data)
 	// printf("ray->dir.x: %f\n", ray->dir.x);
 	// printf("ray->dir.y: %f\n", ray->dir.y);
 	
+	// if (ray->dir.x < 0 && is_integer(ray->pos.x) == 1
+	// 	&& ray->dir.y < 0 && is_integer(ray->pos.y) == 1
+	// 	&& data->map[ray->map_x - 1][ray->map_y - 1] != 0)
+	// {
+	// 	ray->wall = data->map[ray->map_x - 1][ray->map_y - 1];
+	// }
+	// else if (ray->dir.x < 0 && is_integer(ray->pos.x) == 1
+	// 	&& data->map[ray->map_x - 1][ray->map_y] != 0)
+	// {
+	// 	ray->wall = data->map[ray->map_x - 1][ray->map_y];
+	// }
+	// else if (ray->dir.y < 0 && is_integer(ray->pos.y) == 1
+	// 	&& data->map[ray->map_x][ray->map_y - 1] != 0)
+	// {
+	// 	ray->wall = data->map[ray->map_x][ray->map_y - 1];
+	// }
+	// else
+	// {
+	// 	ray->wall = data->map[ray->map_x][ray->map_y];
+	// }
 	if (ray->dir.x < 0 && is_integer(ray->pos.x) == 1
 		&& ray->dir.y < 0 && is_integer(ray->pos.y) == 1
-		&& data->map[ray->map_x - 1][ray->map_y - 1] != 0)
+		&& data->map[ray->map_y - 1][ray->map_x - 1] != 0)
 	{
-		// printf("hello from check for wall2\n");
-		ray->wall = data->map[ray->map_x - 1][ray->map_y - 1];
+		ray->wall = data->map[ray->map_y - 1][ray->map_x - 1];
 	}
 	else if (ray->dir.x < 0 && is_integer(ray->pos.x) == 1
-		&& data->map[ray->map_x - 1][ray->map_y] != 0)
+		&& data->map[ray->map_y][ray->map_x - 1] != 0)
 	{
-		// printf("hello from check for wall3\n");
-		ray->wall = data->map[ray->map_x - 1][ray->map_y];
+		ray->wall = data->map[ray->map_y][ray->map_x - 1];
 	}
 	else if (ray->dir.y < 0 && is_integer(ray->pos.y) == 1
-		&& data->map[ray->map_x][ray->map_y - 1] != 0)
+		&& data->map[ray->map_y - 1][ray->map_x] != 0)
 	{
-		// printf("hello from check for wall4\n");
-		ray->wall = data->map[ray->map_x][ray->map_y - 1];
+		ray->wall = data->map[ray->map_y - 1][ray->map_x];
 	}
 	else
 	{
-		// printf("hello from check for wall5\n");
-		ray->wall = data->map[ray->map_x][ray->map_y];
+		ray->wall = data->map[ray->map_y][ray->map_x];
 	}
-	// printf("hello from check for wall last\n");
-	// if (ray->wall != 0)
-	// 	check_side(data);
 }
 
 double	vector_len(t_vector vector)
@@ -139,14 +152,16 @@ void	calc_perp_length(t_data *data)
 	ray = data->ray;
 	player = data->player;
 	ray->perp_length =
-		(sqrt(pow(ray->pos.x - ray->start_pos.x, 2)
+		((sqrt(pow(ray->pos.x - ray->start_pos.x, 2)
 		+ pow(ray->pos.y - ray->start_pos.y, 2))
 		- sqrt(pow(vector_len(player->direction), 2)
 		+ pow((vector_len(player->screen) * ray->screen_x), 2)))
 		/ 
 		(sqrt(pow(vector_len(player->direction), 2)
 		+ pow((vector_len(player->screen) * ray->screen_x), 2)))
-		* vector_len(player->direction);
+		* vector_len(player->direction))
+		+
+		vector_len(player->direction);
 }
 
 void	ray_algorithm(t_data *data)

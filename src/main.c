@@ -6,13 +6,13 @@
 /*   By: aweissha <aweissha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:07:59 by aweissha          #+#    #+#             */
-/*   Updated: 2024/05/11 18:12:54 by aweissha         ###   ########.fr       */
+/*   Updated: 2024/05/15 13:48:44 by aweissha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int worldMap[mapWidth][mapHeight]=
+int worldMap[mapHeight][mapWidth]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -53,28 +53,28 @@ void	parse_map(t_data *data)
         for (int j = 0; j < mapHeight; j++) 
 		{
             data->map[i][j] = worldMap[i][j];
-			// printf("%d,", data->map[i][j]);
-        }
-		// printf("\n");
-    }
-}
-
-void	print_map(t_data *data)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-    for (int y = 0; y < mapHeight; y++) 
-	{
-        for (int x = 0; x < mapWidth; x++) 
-		{
-			printf("%d,", data->map[x][y]);
+			printf("%d,", data->map[i][j]);
         }
 		printf("\n");
     }
 }
+
+// void	print_map(t_data *data)
+// {
+// 	int	x;
+// 	int	y;
+
+// 	x = 0;
+// 	y = 0;
+//     for (int y = 0; y < mapHeight; y++) 
+// 	{
+//         for (int x = 0; x < mapWidth; x++) 
+// 		{
+// 			printf("%d,", data->map[x][y]);
+//         }
+// 		printf("\n");
+//     }
+// }
 
 int	main(int argc, char **argv)
 {
@@ -83,7 +83,7 @@ int	main(int argc, char **argv)
 	// printf("hello\n");
 	data = init_data(argc, argv);
 	parse_map(data);
-	print_map(data);
+	// print_map(data);
 	raycaster(data);
 
 	// mlx_loop_hook(data->mlx, ft_hook, data->mlx);
