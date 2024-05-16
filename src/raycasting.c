@@ -6,7 +6,7 @@
 /*   By: aweissha <aweissha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:53:58 by aweissha          #+#    #+#             */
-/*   Updated: 2024/05/15 17:46:51 by aweissha         ###   ########.fr       */
+/*   Updated: 2024/05/16 10:57:25 by aweissha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ double	find_factor(t_ray *ray)
 	if (a_x == 0)
 		a_x = -1 / ray->dir.x;
 	if (a_y == 0)
-		a_y = -1 / ray->dir.y;		
+		a_y = -1 / ray->dir.y;
 	a = get_lower(a_x, a_y);
 	return (a);
 }
@@ -230,3 +230,4 @@ void	raycaster(t_data *data)
 		i++;
 	}
 }
+
