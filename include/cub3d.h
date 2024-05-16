@@ -6,7 +6,7 @@
 /*   By: aweissha <aweissha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:02:00 by aweissha          #+#    #+#             */
-/*   Updated: 2024/05/15 13:15:34 by aweissha         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:35:43 by aweissha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 # define mapWidth 24
 # define mapHeight 24
+# define PI 3.1415926
 
 typedef struct s_vector
 {
@@ -44,7 +45,7 @@ typedef struct s_ray
 	t_vector	start_pos;
 	t_vector	pos;
 	t_vector	dir;
-	int			screen_x;
+	float		factor;
 	int			map_x;
 	int			map_y;
 	int			wall;

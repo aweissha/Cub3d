@@ -6,7 +6,7 @@
 /*   By: aweissha <aweissha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:53:58 by aweissha          #+#    #+#             */
-/*   Updated: 2024/05/16 10:57:25 by aweissha         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:46:38 by aweissha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	elongate_ray(t_ray *ray)
 int is_integer(double x)
 {
 	// printf("hello from is_integer\n");
-    return (fabs(x - round(x)) < 1e-9);
+    return (fabs(x - round(x)) < 1e-15);
 }
 
 void	check_side(t_data *data)
@@ -155,10 +155,10 @@ void	calc_perp_length(t_data *data)
 		((sqrt(pow(ray->pos.x - ray->start_pos.x, 2)
 		+ pow(ray->pos.y - ray->start_pos.y, 2))
 		- sqrt(pow(vector_len(player->direction), 2)
-		+ pow((vector_len(player->screen) * ray->screen_x), 2)))
+		+ pow((vector_len(player->screen) * ray->factor), 2)))
 		/ 
 		(sqrt(pow(vector_len(player->direction), 2)
-		+ pow((vector_len(player->screen) * ray->screen_x), 2)))
+		+ pow((vector_len(player->screen) * ray->factor), 2)))
 		* vector_len(player->direction))
 		+
 		vector_len(player->direction);
@@ -208,16 +208,22 @@ void	render_image(t_data *data)
 	if (ray->perp_length < 1)
 		ray->line_height = data->screen_height;
 	else
-		ray->line_height = (int)data->screen_height / ray->perp_length;
+		ray->line_height = data->screen_height / (float)ray->perp_length;
+		// ray->line_height = (float)(data->screen_height / ray->perp_length);
+	// printf("perp_length: %f\n", ray->perp_length);
+	// printf("screen_height: %d\n", data->screen_height);
+	// printf("line_height: %d\n", ray->line_height);
 	ray->line_top = data->screen_height / 2 - ray->line_height / 2;
+	// printf("line_top: %d\n", ray->line_top);
 	ray->line_bottom = data->screen_height / 2 + ray->line_height / 2;
+	// printf("line_bottom: %d\n", ray->line_bottom);
 	line_to_image(data);
 }
 
 void	raycaster(t_data *data)
 {
 	int	i;
-
+	// t_vector ray_len;
 	i = 0;
 	while (i < data->screen_width)
 	{
@@ -225,7 +231,13 @@ void	raycaster(t_data *data)
 		init_ray(i, data);
 		// printf("hello from raycaster\n");
 		ray_algorithm(data);
-		printf("perp_length: %f\n", data->ray->perp_length);
+		
+		// ray_len.x = data->ray->pos.x - data->ray->start_pos.x;
+		// ray_len.y = data->ray->pos.y - data->ray->start_pos.y;
+		// printf("ray index: %d, ray_length: %f\n", data->ray->index, vector_len(ray_len));
+		// printf("ray_index: %d x: %f y: %f\n", data->ray->index, data->ray->pos.x, data->ray->pos.y);
+		
+		
 		render_image(data);
 		i++;
 	}
