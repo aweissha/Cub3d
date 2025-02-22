@@ -6,7 +6,7 @@
 /*   By: sparth <sparth@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 15:52:11 by sparth            #+#    #+#             */
-/*   Updated: 2024/01/16 17:46:10 by sparth           ###   ########.fr       */
+/*   Updated: 2024/06/11 19:48:30 by sparth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 30
+#  define BUFFER_SIZE 1
 # endif
 
 typedef struct s_listg
